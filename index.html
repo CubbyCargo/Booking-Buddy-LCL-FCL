@@ -275,7 +275,7 @@ function renderLclCharges(quote) {
 
   if (!quote.rate ||
       !Array.isArray(quote.rate.charges) ||
-      quote.rate.charges.length !== 10) {
+      quote.rate.charges.length === 0) {
     throw new Error('Invalid LCL charges');
   }
 
