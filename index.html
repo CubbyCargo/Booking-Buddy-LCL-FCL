@@ -255,14 +255,27 @@ function renderLclShipment(quote) {
       shipment.length, shipment.width, shipment.height
     ].join(' × ') + ' ' + (shipment.dimension_unit || '');
 
-    addDetails('Dimensions (L × W × H)', dimensions, 'Quantity', shipment.quantity);
-    addDetails(
-      'Total Weight',
-      shipment.total_weight + ' ' + (shipment.weight_unit || ''),
-      'Calculated CBFT',
-      shipment.cbft
-    );
-    addDetails('Billable Volume', shipment.billable_volume, '', '');
+  addDetails('Dimensions (L × W × H)', dimensions, 'Quantity', shipment.quantity);
+    const isMiami = quote.lane === 'MIA-TT';
+    const volumeUnit = isMiami ? 'CBFT' : 'CBM';
+
+    const calculatedVolume = isMiami
+      ? shipment.cbft
+      : shipment.raw_cbm;
+
+addDetails(
+  'Total Weight',
+  shipment.total_weight + ' ' + (shipment.weight_unit || ''),
+  'Calculated ' + volumeUnit,
+  Number(calculatedVolume).toFixed(2) + ' ' + volumeUnit
+);
+
+addDetails(
+  'Billable Volume',
+  Number(shipment.billable_volume).toFixed(2) + ' ' + volumeUnit,
+  '',
+  ''
+);
   } else {
     throw new Error('Unrecognised LCL shipment details');
   }
