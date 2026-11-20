@@ -248,9 +248,22 @@ function renderLclShipment(quote) {
 
   addDetails('POL', quote.pol || 'Miami', 'POD', quote.pod || 'Trinidad');
 
-  if (shipment.mode === 'cbft_only') {
-    addDetails('CBFT', shipment.provided_cbft, '', '');
-  } else if (shipment.mode === 'standard') {
+
+if (shipment.mode === 'cbft_only') {
+  addDetails(
+    'Total Volume',
+    Number(shipment.provided_cbft).toFixed(2) + ' CBFT',
+    'Billable Volume',
+    Number(shipment.billable_volume).toFixed(2) + ' CBFT'
+  );
+} else if (shipment.mode === 'cbm_only') {
+  addDetails(
+    'Total Volume',
+    Number(shipment.provided_cbm).toFixed(2) + ' CBM',
+    'Billable Volume',
+    Number(shipment.billable_volume).toFixed(2) + ' CBM'
+  );
+} else if (shipment.mode === 'standard') {
     const dimensions = [
       shipment.length, shipment.width, shipment.height
     ].join(' × ') + ' ' + (shipment.dimension_unit || '');
